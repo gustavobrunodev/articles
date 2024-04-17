@@ -10,18 +10,19 @@ import {
 @Directive({
   standalone: true,
   selector: '[validCreditCard]',
+  // Adicionamos nossa diretiva à lista de validadores existentes
   providers: [
     { provide: NG_VALIDATORS, useExisting: CreditCardValidator, multi: true },
   ],
 })
 export class CreditCardValidator implements Validator {
-  // This is the implementation of the Validator interface
+  // Este método é o exigido pela interface do Validador
   validate(c: FormControl): ValidationErrors | null {
-    // All we do is call the static method
+    // Tudo o que fazemos é chamar o método estático
     return CreditCardValidator.validateCcNumber(c);
   }
 
-  // This is the static method that does the actual validation
+  // Este é o método estático que faz a validação real
   static validateCcNumber(control: AbstractControl): ValidationErrors | null {
     if (!control.value) {
       return {
@@ -36,17 +37,17 @@ export class CreditCardValidator implements Validator {
         control.value.startsWith('5')
       )
     ) {
-      // Return error if card is not Amex, Visa or Mastercard
+      // Retorna um erro se o cartão não é Amex, Visa ou Mastercard
       return {
         creditCard:
-          'Your credit card number is not from a supported credit card provider',
+          'O número do seu cartão de crédito não é de uma operadora de cartão de crédito compatível',
       };
     } else if (control.value.length !== 16) {
       console.log(control.value);
-      // Return error if length is not 16 digits
-      return { creditCard: 'A credit card number must be 16-digit long' };
+      // Retorna erro se não tiver 16 dígitos
+      return { creditCard: 'O número do cartão de crédito deve ter 16 dígitos' };
     }
-    // If no error, return null
+    // Se não tiver erro, retorna nulo
     return null;
   }
 }
